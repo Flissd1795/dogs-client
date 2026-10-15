@@ -1,5 +1,5 @@
 // The React app runs on port 5173. The API runs on port 3000.
-const API_URL = import.meta.env._API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // One function the rest of the app can use instead of repeating fetch()
 //
@@ -22,6 +22,8 @@ export async function api(path, options = {}) {
   let res;
   try {
     // fetch talks to the server. await means "wait for the reply"
+    console.log("BASE URL", API_URL)
+    console.log("Path:", path)
     res = await fetch(API_URL + path, {
       method: method,
       headers: headers,

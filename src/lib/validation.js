@@ -1,21 +1,57 @@
-export function validateSignIn(email, password) {
-    const errors = {};
 
-    if (!email.trim()) {
-      errors.email = "Email is required";
-    }
-  
-    if (!password) {
-      errors.password = "Password is required";
-    }
-    
-    if (!/[A-Z]/.test(password)) {
-        errors.password = "Password must contain an uppercase letter";
-      } else if (!/[0-9]/.test(password)) {
-        errors.password = "Password must contain a number";
-      } else if (!/[^A-Za-z0-9]/.test(password)) {
-        errors.password = "Password must contain a special character";
-      }
-      
-    return errors;
+function validateEmail(email) {
+  if (!email.trim()) {
+    return "Email is required";
+  }
+
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    return "Please enter a valid email address";
+  }
+
+  return null;
+}
+
+function validatePassword(password) {
+  if (!password) {
+    return "Password is required";
+  }
+
+  if (!/[A-Z]/.test(password)) {
+    return "Password must contain an uppercase letter";
+  }
+
+  if (!/[0-9]/.test(password)) {
+    return "Password must contain a number";
+  }
+
+  if (!/[^A-Za-z0-9]/.test(password)) {
+    return "Password must contain a special character";
+  }
+
+  return null;
+}
+
+export function validateSignIn(email, password) {
+  const errors = {};
+
+  const emailError = validateEmail(email);
+  if (emailError) errors.email = emailError;
+
+  if (!password) {
+    errors.password = "Password is required";
+  }
+
+  return errors;
+}
+
+export function validateRegister(email, password) {
+  const errors = {};
+
+  const emailError = validateEmail(email);
+  if (emailError) errors.email = emailError;
+
+  const passwordError = validatePassword(password);
+  if (passwordError) errors.password = passwordError;
+
+  return errors;
 }

@@ -72,6 +72,22 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.password-requirements {
+  display: block;
+  font-size: 0.85rem;
+  color: #666;
+  margin: 4px 0 8px;
+}
+
+.error {
+  display: block;
+  color: #dc2626;
+  font: inherit;
+  font-size: 14px;
+  font-weight: bold;
+  margin-top: 6px;
+}
+
 .dogs {
   list-style: none;
   padding: 0;

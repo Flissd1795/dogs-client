@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../api";
-import { validateSignIn } from "../lib/validation";
+import { validateRegister, validateSignIn } from "../lib/validation";
 
 // Giving register two functions: onSuccess -> handleRegister, onError -> showError function
 // Register now has access to the parent functions
@@ -16,7 +16,7 @@ export default function Register({ onSuccess, onError, onMessage }) {
   async function register(e) {
     e.preventDefault(); // Prevents browser default reload of page
 
-    const newErrors = validateSignIn(email, password);
+    const newErrors = validateRegister(email, password);
 
     setErrors(newErrors);
 
@@ -44,27 +44,48 @@ export default function Register({ onSuccess, onError, onMessage }) {
       <h2>Register</h2>
 
       {/* When form is submitted, run register() */}
-      <form onSubmit={register}>
+      <form onSubmit={register} noValidate>
       <label>
         Email
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          // Inputs disabled when loading
+          // ...prev copies existing err to new obj
+          // email: "" sets error to empty string
+          // setErrors tells React to update the state
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setErrors((prev) => ({ ...prev, email: "" }));
+          }}
           disabled={loading}
+          required={true}
+          aria-invalid={Boolean(errors.email)}
         />
+
+      {errors.email && (
+          <span className="error">{errors.email}</span>
+        )}
       </label>
 
       <label>
         Password
+
+        <em className="password-requirements">
+          Must be at least 8 characters, include an uppercase
+          letter, a number and a special character.
+        </em>
+
         <input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setErrors((prev) => ({ ...prev, password: "" }));
+          }}
           disabled={loading}
-          required
+          required={true}
           minLength={8}
+          aria-invalid={Boolean(errors.password)}
         />
 
         {errors.password && (

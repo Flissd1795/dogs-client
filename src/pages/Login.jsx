@@ -27,10 +27,13 @@ export default function Login({ onSuccess, onError, onMessage }) {
       });
       onSuccess(data);
     } catch (err) {
-      if (err.field) {
-        setErrors({ [err.field]: err.message });
-      }
-      onError(err);
+      setErrors({
+        password: "Incorrect email or password"
+      })
+      // if (err.field) {
+      //   setErrors({ [err.field]: err.message });
+      // }
+      // onError(err);
     } finally {
       setLoading(false);
     }
@@ -40,16 +43,24 @@ export default function Login({ onSuccess, onError, onMessage }) {
     <section>
       <h2>Login</h2>
 
-      <form onSubmit={login}>
+      <form onSubmit={login} noValidate>
       <label>
         Email
         <input
           type="email"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setErrors((prev) => ({ ...prev, email: "" }));
+          }}
           disabled={loading}
-          required
+          required={true}
+          aria-invalid={Boolean(errors.email)}
         />
+
+        {errors.email && (
+          <span className="error">{errors.email}</span>
+        )}
       </label>
 
       <label>
@@ -57,7 +68,10 @@ export default function Login({ onSuccess, onError, onMessage }) {
         <input
           type="password"
           value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          onChange={(e) => {
+            setPassword(e.target.value);
+            setErrors((prev) => ({ ...prev, password: "" }));
+          }}
           disabled={loading}
           required
         />
