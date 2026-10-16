@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Dogs from "./pages/Dogs";
 import "./App.css";
+import { getFriendlyErrorMessage } from "./lib/errorMessages";
 import {
   Link,
   Routes,
@@ -12,7 +13,8 @@ import {
 } from "react-router-dom";
 
 function App() {
-  const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState(""); // error messaging
+  const [message, setMessage] = useState(""); // e.g. 'logging in' etc
   const [role, setRole] = useState("");
   // are we still checking whether the user is already logged in?
   const [checkingSession, setCheckingSession] = useState(true);
@@ -22,6 +24,10 @@ function App() {
   const isLoggedIn = Boolean(role);
   const isAdmin = role === "ADMIN";
 
+  function showError(err) {
+    setErrorMessage(getFriendlyErrorMessage(err));
+  }
+
   // Replaces localStorage.getItem("token")
   useEffect(() => {
     api("/me")
@@ -29,10 +35,6 @@ function App() {
       .catch(() => setRole(""))
       .finally(() => setCheckingSession(false));
   }, []);
-
-  function showError(err) {
-    setMessage(err.message || "Something went wrong");
-  }
 
   function handleRegister(data) {
     setRole(data.role);
@@ -68,6 +70,28 @@ function App() {
       <p className="status" aria-live="polite">
         {message || (isLoggedIn ? "Logged in as " + role : "Not logged in")}
       </p>
+
+      {errorMessage && (
+        <div className="error-overlay">
+          <div
+            className="error-popup"
+            role="alertdialog"
+            aria-modal="true"
+            aria-labelledby="error-title"
+          >
+            <h2 id="error-title">Something went wrong</h2>
+
+            <p>{errorMessage}</p>
+
+            <button
+              type="button"
+              onClick={() => setErrorMessage("")}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
 
       <nav className="row">
         {!isLoggedIn && (
