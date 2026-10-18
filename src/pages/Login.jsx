@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../api";
-import { validateSignIn } from "../lib";
+import { validateSignIn } from "../lib/validation";
 
 export default function Login({ onSuccess, onError, onMessage }) {
   const [email, setEmail] = useState("");
