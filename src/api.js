@@ -1,5 +1,5 @@
 // The React app runs on port 5173. The API runs on port 3000.
-// const API_URL = import.meta.env.VITE_API_URL;
+const API_URL = import.meta.env.VITE_API_URL;
 
 // One function the rest of the app can use instead of repeating fetch()
 //
