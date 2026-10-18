@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { api } from "../api";
-import { validateSignIn } from "../lib/validation";
+import { validateSignIn } from "../lib";
 
 export default function Login({ onSuccess, onError, onMessage }) {
   const [email, setEmail] = useState("");
@@ -27,13 +27,13 @@ export default function Login({ onSuccess, onError, onMessage }) {
       });
       onSuccess(data);
     } catch (err) {
-      setErrors({
-        password: "Incorrect email or password"
-      })
-      // if (err.field) {
-      //   setErrors({ [err.field]: err.message });
-      // }
-      // onError(err);
+      if (err.status === 401) {
+        setErrors({
+          password: "Incorrect email or password"
+        });
+      } else {
+        onError(err);
+      }
     } finally {
       setLoading(false);
     }
